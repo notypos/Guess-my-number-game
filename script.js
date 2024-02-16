@@ -19,6 +19,9 @@ console.log(document.querySelector('.guess').value);
 let secretNumber = Math.trunc(Math.random() * 20) + 1;
 let score = 20; // state variable
 let highscore = 0;
+const displayMessage = function (message) {
+  document.querySelector('.message').textContent = message;
+};
 
 // Event listener for the click of "Check!" button and the event handler function
 document.querySelector('.check').addEventListener('click', function () {
@@ -30,12 +33,12 @@ document.querySelector('.check').addEventListener('click', function () {
   // if the guess ... then textContent changes... based on const guess
   // When there is no input
   if (!guess) {
-    document.querySelector('.message').textContent = '⛔No number!';
+    displayMessage('⛔No number!');
 
     // When player wins
   } else if (guess === secretNumber) {
     document.querySelector('.number').textContent = secretNumber;
-    document.querySelector('.message').textContent = '🎉Correct Nubmer!';
+    displayMessage('🎉Correct Nubmer!');
     score++; // increase state of score
     document.querySelector('.score').textContent = score; // update score
     document.querySelector('body').style.backgroundColor = '#60b347'; // update background color
@@ -46,30 +49,16 @@ document.querySelector('.check').addEventListener('click', function () {
       document.querySelector('.highscore').textContent = highscore;
     }
 
-    // When guess is too low
-  } else if (guess < secretNumber) {
+    // When guess is not secret number
+  } else if (guess !== secretNumber) {
     if (score > 0) {
       // nested// if score above 0 then continue
-      document.querySelector('.message').textContent = '📉Too low!';
+      displayMessage(guess > secretNumber ? '📈Too High!' : '📉Too low!');
       score--; // decrease state of score
       document.querySelector('.score').textContent = score;
     } else {
       // otherwise socre is 0  and you've lost the game
-      document.querySelector('.message').textContent =
-        'You lost, how did you lose this easy easy game? Man you must suck or something. Geez get a job man.';
-    }
-
-    // When guess is too high
-  } else if (guess > secretNumber) {
-    if (score > 0) {
-      // same thing here above 0
-      document.querySelector('.message').textContent = '📈Too High!';
-      score--; // decrease state of score
-      document.querySelector('.score').textContent = score;
-    } else {
-      // score 0 u lose
-      document.querySelector('.message').textContent =
-        'You lost, how did you lose this easy easy game? Man you must suck or something. Geez get a job man.';
+      displayMessage('You Lose🙉');
     }
   }
 
@@ -84,7 +73,7 @@ document.querySelector('.again').addEventListener('click', function () {
   score = 20;
   secretNumber = Math.trunc(Math.random() * 20) + 1;
 
-  document.querySelector('.message').textContent = 'Start guessing...';
+  displayMessage('Start guessing...');
   document.querySelector('.score').textContent = score;
   document.querySelector('.number').textContent = '?';
   document.querySelector('.guess').value = '';
